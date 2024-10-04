@@ -7,12 +7,12 @@ const specialOperators = ['+/-', '%', '.', '=', 'C', 'Backspace'];
 @Injectable({
   providedIn: 'root'
 })
-export class CalculatorService {  
+export class CalculatorService {
   public resultText = signal('0');
   public subResultText = signal('0');
   public lastOperator = signal('+');
 
-  public constructNumber(value: string): void {    
+  public constructNumber(value: string): void {
     if (![...numbers, ...operators, ...specialOperators].includes(value)) {
       console.log('Invalid input', value);
       return;
@@ -39,8 +39,8 @@ export class CalculatorService {
       }
       this.resultText.update(v => v.slice(0, -1));
       return;
-    }    
-    if (operators.includes(value)) {      
+    }
+    if (operators.includes(value)) {
       if (this.subResultText() != '0') {
         this.calculateResult();
       }
@@ -57,7 +57,7 @@ export class CalculatorService {
     if (value === '.') {
       if (this.resultText().includes('.')) return;
       if (this.resultText() === '0' || this.resultText() === '') {
-        this.resultText.set('0.');        
+        this.resultText.set('0.');
         return;
       }
     }
@@ -79,16 +79,16 @@ export class CalculatorService {
         return
       }
       if (this.resultText() === '-0') {
-        this.resultText.set('-' + value);  
+        this.resultText.set('-' + value);
         return;
       }
     }
     this.resultText.update(text => text + value);
   }
 
-  public calculateResult() {    
+  public calculateResult() {
     const number1 = parseFloat(this.subResultText());
-    const number2 = parseFloat(this.resultText());    
+    const number2 = parseFloat(this.resultText());
     let result = 0;
     switch(this.lastOperator()) {
       case '+':
@@ -101,9 +101,9 @@ export class CalculatorService {
         result = number1 * number2;
         break;
       case '÷':
-        if (number2 === 0) return;        
-        result = number1 / number2;        
-        break;  
+        if (number2 === 0) return;
+        result = number1 / number2;
+        break;
     }
     this.resultText.set(result.toString());
     this.subResultText.set('0');
